@@ -6,19 +6,30 @@ class ToDoQuarter {
 
     public ToDoQuarter() {
         // Constructs a TodoQuarter object with list of TodoItem objects
+
     }
 
-    public  void addItem(String title, LocalDate deadline) {
+    public void addItem(ToDoItem item) {
         // Append TodoItem object to todoItems sorted decreasing by deadline.
+        toDoList.add(item);
     }
 
     public void removeItem(int itemIndex) {
         // Removes TodoItem object using index of list todoItems
+        toDoList.remove(itemIndex);
     }
 
     public void archieveItems() {
-        // Removes all TodoItem objects with a parameter isDone set to true from list
-        // todoItems.
+        for (int i=0; i<toDoList.size(); i++){
+            if (toDoList.get(i).getStatus()){
+
+            }
+        }
+        }
+    
+
+    public void getItem(int index) {
+        // Returns TodoItem object from index of list todoItems.
     }
 
     public void getItems() {

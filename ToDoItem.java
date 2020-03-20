@@ -7,20 +7,22 @@ class ToDoItem{
     private boolean isDone;
 
 
-    public ToDoItem(String titleArg, LocalDate deadlineArg){
-        // constructor
-        title = titleArg;
-        deadline = deadlineArg;
+    public ToDoItem(String title, LocalDate deadline){
+        this.title = title;
+        this.deadline = deadline;
         isDone = false;
     }
 
-    public void getTitle(){
-        System.out.println(this.title);
+    public String getTitle(){
+        return this.title;
     }
 
-    public void getDeadline(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        System.out.println(formatter.format(this.deadline));
+    public LocalDate getDeadline(){
+        return this.deadline;
+    }
+
+    public boolean getStatus(){
+        return this.isDone;
     }
 
     public void mark(){
@@ -33,6 +35,17 @@ class ToDoItem{
         System.out.println("ToDoItem marked as undone.");
     }
 
-    public void itemToString(){
+    public String itemToString(){
+        String entry = "";
+
+        if (this.isDone){
+            entry += "[x]";
+        } else{
+            entry += "[ ]";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String deadlineString = formatter.format(this.deadline);
+        entry += deadlineString + " " + this.title;
+        return entry;
     }
 }
