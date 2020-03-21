@@ -19,14 +19,32 @@ class ToDoQuarter {
         this.toDoList.remove(itemIndex);
     }
 
+    public void removeItemByName(String title) {
+        int z = 0;
+        for (int i=0;i<this.toDoList.size();i++){
+            if (this.toDoList.get(i).getTitle().equals(title)){
+                z = i;
+            }
+        }
+    this.toDoList.remove(z);
+    }
+
+    public boolean hasItem(String title) {
+        for (ToDoItem element : this.toDoList) {
+            if (element.getTitle().equals(title)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void archieveItems() {
-        for (int i=0; i<toDoList.size(); i++){
-            if (this.toDoList.get(i).getStatus()){
+        for (int i = 0; i < toDoList.size(); i++) {
+            if (this.toDoList.get(i).getStatus()) {
                 this.toDoList.remove(i);
             }
         }
     }
-    
 
     public ToDoItem getItem(int index) {
         // Returns TodoItem object from index of list todoItems.
@@ -38,11 +56,12 @@ class ToDoQuarter {
         return this.toDoList;
     }
 
-    public void toStringItems(){
-        //Returns a formatted list of todoItems sorted decreasing by deadline. There is an expecting output:
+    public void toStringItems() {
+        // Returns a formatted list of todoItems sorted decreasing by deadline. There is
+        // an expecting output:
     }
 
-    public int getNumOfTasks(){
+    public int getNumOfTasks() {
         return this.toDoList.size();
     }
 }
