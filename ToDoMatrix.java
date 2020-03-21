@@ -17,7 +17,7 @@ class ToDoMatrix{
     //     return ToDoQuarter;
     // }
 
-    public void addItem(String title, LocalDate deadline, boolean isImportant){
+    public void addItem(ToDoItem item, boolean isImportant){
 
     }
 
@@ -26,6 +26,8 @@ class ToDoMatrix{
     }
 
     public void saveItemsToFile(String FileName){
+        // this.toDoQuartersMap
+        
 
     }
 

@@ -4,9 +4,16 @@ import java.time.LocalDate;
 
 class ToDoQuarter {
     private List<ToDoItem> toDoList = new ArrayList<>();
+    private String title;
 
-    public ToDoQuarter() {
+    public ToDoQuarter(String title) {
         // Constructs a TodoQuarter object with list of TodoItem objects
+        this.title = title;
+
+    }
+
+    public String getTitle(){
+        return this.title;
     }
 
     public void addItem(ToDoItem item) {

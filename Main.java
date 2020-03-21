@@ -1,5 +1,8 @@
 import java.util.Locale;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -17,6 +20,7 @@ class Main {
     private static ToDoQuarter UX;
     private static ToDoQuarter XX;
     private static List<List<ToDoItem>> quartersLists;
+    private static List<ToDoQuarter> quartersObjects;
     private static ToDoMatrix matrix;
 
     public static void main(String args[]) {
@@ -33,7 +37,7 @@ class Main {
 
     private static void mainMenu() {
         String[] menuList = { "Add a ToDoItem", "Delete a ToDoItem", "Change status of a ToDoItem",
-                "Display all ToDoItems", "Archive all done ToDoItems", "Export ToDoItems to a .cvs file", "Exit" };
+                "Display all ToDoItems", "Archive all done ToDoItems", "Export ToDoItems to a .cvs file", "Import ToDoItems from a .csv file", "Exit" };
         System.out.println("");
         System.out.println("EISENHOWER MATRIX");
         System.out.println("");
@@ -55,7 +59,9 @@ class Main {
         menuMap.put("2", () -> removeItem());
         menuMap.put("3", () -> changeStatusOfItem());
         menuMap.put("4", () -> printAllItems());
-        menuMap.put("7", () -> exitApp());
+        menuMap.put("6", () -> exportToTxt());
+       
+        menuMap.put("8", () -> exitApp());
     }
 
     private static LocalDate convertStringToLocalDate(String userDate) {
@@ -70,13 +76,8 @@ class Main {
         String dateString = gatherInput("Deadline of your ToDoItem [DD-MM-YYYY]: ");
         String isImportantString = gatherInput("Is your ToDoItem important? [Y/N]");
         LocalDate formattedDate = convertStringToLocalDate(dateString);
-
         ToDoItem userEvent = new ToDoItem(itemTitle, formattedDate);
-
         addToQuarter(userEvent, formattedDate, isImportantString);
-        // userEvent.getTitle();
-        // userEvent.getDeadline();
-
     }
 
     private static String gatherInput(String title) {
@@ -86,11 +87,12 @@ class Main {
     }
 
     private static void createQuartersAndMatrix() {
-        UI = new ToDoQuarter();
-        XI = new ToDoQuarter();
-        UX = new ToDoQuarter();
-        XX = new ToDoQuarter();
+        UI = new ToDoQuarter("UI");
+        XI = new ToDoQuarter("XI");
+        UX = new ToDoQuarter("UX");
+        XX = new ToDoQuarter("XX");
         quartersLists = Arrays.asList(UI.getItems(), UX.getItems(), XI.getItems(), XX.getItems());
+        quartersObjects = new ArrayList<ToDoQuarter>(Arrays.asList(UI, UX, XI, XX));
         matrix = new ToDoMatrix();
     }
 
@@ -154,10 +156,9 @@ class Main {
     }
 
     public static void removeItem() {
-        List<ToDoQuarter> quarters = new ArrayList<ToDoQuarter>(Arrays.asList(UI, UX, XI, XX));
         printAllItems();
         String userItem = gatherInput("Type in the name of ToDoItem you want to delete");
-        for (ToDoQuarter quarter : quarters) {
+        for (ToDoQuarter quarter : quartersObjects) {
             if (quarter.hasItem(userItem)) {
                 quarter.removeItemByName(userItem);
             }
@@ -165,8 +166,36 @@ class Main {
     }
 
     public static void archiveAll(){
-        for (ToDoItem element : listAllItems()){
-            if (element.getStatus())
+        for (ToDoQuarter element : quartersObjects){
+            element.archieveItems();
+        }
+    }
+
+    public static String prepareStringToExport(){
+        String allEntries = "";
+        for (ToDoQuarter quarter : quartersObjects){
+            if (quarter.getTitle().equals("UI") || quarter.getTitle().equals("XI")){
+                for (ToDoItem item : quarter.getItems()){
+                allEntries += item.toFile() + "| is_important\n";
+                }
+            } else {
+                for (ToDoItem item : quarter.getItems()) {
+                    allEntries += item.toFile() + " \n";
+                }
+            }
+        }
+    return allEntries;
+    }
+
+    public static void exportToTxt(){
+        String data = prepareStringToExport();
+        try {
+        File file = new File("ToDoItems.txt");
+        FileWriter writer = new FileWriter(file, true);
+        writer.write(data);
+        writer.close();
+        } catch (IOException e){
+            System.out.println(e);
         }
     }
 

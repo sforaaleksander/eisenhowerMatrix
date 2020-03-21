@@ -37,15 +37,19 @@ class ToDoItem{
 
     public String toString(){
         String entry = "";
-
-        if (this.isDone){
-            entry += "[x]";
-        } else{
-            entry += "[ ]";
-        }
+        String status = isDone ? "X" : " ";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String deadlineString = formatter.format(this.deadline);
-        entry += deadlineString + " " + this.title;
+        entry += status + deadlineString + " " + this.title;
+        return entry;
+    }
+
+    public String toFile(){
+        String entry = "";
+        String status = isDone ? "[X]" : "[ ]";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String deadlineString = formatter.format(this.deadline);
+        entry += status + "|" + deadlineString + "|" + this.title;
         return entry;
     }
 }
