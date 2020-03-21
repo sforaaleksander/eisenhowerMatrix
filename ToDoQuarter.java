@@ -1,42 +1,48 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 
 class ToDoQuarter {
-    private List<ToDoItem> toDoList;
+    private List<ToDoItem> toDoList = new ArrayList<>();
 
     public ToDoQuarter() {
         // Constructs a TodoQuarter object with list of TodoItem objects
-
     }
 
     public void addItem(ToDoItem item) {
         // Append TodoItem object to todoItems sorted decreasing by deadline.
-        toDoList.add(item);
+        this.toDoList.add(item);
     }
 
     public void removeItem(int itemIndex) {
         // Removes TodoItem object using index of list todoItems
-        toDoList.remove(itemIndex);
+        this.toDoList.remove(itemIndex);
     }
 
     public void archieveItems() {
         for (int i=0; i<toDoList.size(); i++){
-            if (toDoList.get(i).getStatus()){
-
+            if (this.toDoList.get(i).getStatus()){
+                this.toDoList.remove(i);
             }
         }
-        }
+    }
     
 
-    public void getItem(int index) {
+    public ToDoItem getItem(int index) {
         // Returns TodoItem object from index of list todoItems.
+        return this.toDoList.get(index);
     }
 
-    public void getItems() {
-        // Returns TodoItem object from index of list todoItems.
+    public List<ToDoItem> getItems() {
+        // Returns private field todoItems.
+        return this.toDoList;
     }
 
     public void toStringItems(){
         //Returns a formatted list of todoItems sorted decreasing by deadline. There is an expecting output:
+    }
+
+    public int getNumOfTasks(){
+        return this.toDoList.size();
     }
 }

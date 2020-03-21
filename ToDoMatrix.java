@@ -2,7 +2,7 @@ import java.util.Map;
 import java.time.LocalDate;
 
 class ToDoMatrix{
-    Map<String, ToDoQuarter> toDoQuartersMap;
+    private Map<String, ToDoQuarter> toDoQuartersMap;
 
     public ToDoMatrix(){
 
@@ -12,7 +12,7 @@ class ToDoMatrix{
         return toDoQuartersMap;
     }
 
-    // public ToDoQuarter getQuarter(String status){
+    // public ToDoQuarter getQuarter(String priority){
     //     return ToDoQuarter;
     // }
 

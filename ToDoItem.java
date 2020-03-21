@@ -35,7 +35,7 @@ class ToDoItem{
         System.out.println("ToDoItem marked as undone.");
     }
 
-    public String itemToString(){
+    public String toString(){
         String entry = "";
 
         if (this.isDone){
