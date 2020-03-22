@@ -1,6 +1,7 @@
 import java.util.Locale;
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -37,8 +38,8 @@ class Main {
 
     private static void mainMenu() {
         String[] menuList = { "Add a ToDoItem", "Delete a ToDoItem", "Change status of a ToDoItem",
-                "Display all ToDoItems", "Archive all done ToDoItems", "Export ToDoItems to a .cvs file", "Import ToDoItems from a .csv file", 
-                "Display as a table","Exit" };
+                "Display all ToDoItems", "Archive all done ToDoItems", "Export ToDoItems to a .cvs file",
+                "Import ToDoItems from a .csv file", "Display as a table", "Exit" };
         System.out.println("");
         System.out.println("EISENHOWER MATRIX");
         System.out.println("");
@@ -60,7 +61,9 @@ class Main {
         menuMap.put("2", () -> removeItem());
         menuMap.put("3", () -> changeStatusOfItem());
         menuMap.put("4", () -> printAllItems());
+        menuMap.put("5", () -> archiveAll());
         menuMap.put("6", () -> exportToTxt());
+        menuMap.put("7", () -> importFromTxt());
         menuMap.put("8", () -> displayTable());
         menuMap.put("9", () -> exitApp());
     }
@@ -76,9 +79,14 @@ class Main {
         String itemTitle = gatherInput("Title of your ToDoItem: ");
         String dateString = gatherInput("Deadline of your ToDoItem [DD-MM-YYYY]: ");
         String isImportantString = gatherInput("Is your ToDoItem important? [Y/N]");
+        createItemAddToQuarter(itemTitle, dateString, isImportantString);
+    }
+
+    private static void createItemAddToQuarter(String itemTitle, String dateString, String isImportantString) {
         LocalDate formattedDate = convertStringToLocalDate(dateString);
         ToDoItem userEvent = new ToDoItem(itemTitle, formattedDate);
         addToQuarter(userEvent, formattedDate, isImportantString);
+
     }
 
     private static String gatherInput(String title) {
@@ -89,17 +97,16 @@ class Main {
 
     private static void createQuartersAndMatrix() {
         matrix = new ToDoMatrix();
-        UI = new ToDoQuarter("UI");
+        UI = new ToDoQuarter();
         matrix.addQuarter("UI", UI);
-        XI = new ToDoQuarter("XI");
+        XI = new ToDoQuarter();
         matrix.addQuarter("XI", XI);
-        UX = new ToDoQuarter("UX");
+        UX = new ToDoQuarter();
         matrix.addQuarter("UX", UX);
-        XX = new ToDoQuarter("XX");
+        XX = new ToDoQuarter();
         matrix.addQuarter("XX", XX);
         quartersLists = Arrays.asList(UI.getItems(), UX.getItems(), XI.getItems(), XX.getItems());
         quartersObjects = new ArrayList<ToDoQuarter>(Arrays.asList(UI, UX, XI, XX));
-        
     }
 
     private static boolean isUrgent(LocalDate deadline) {
@@ -120,8 +127,6 @@ class Main {
     private static void addToQuarter(ToDoItem userItem, LocalDate deadline, String isImportant) {
         if (isUrgent(deadline) && toBoolean(isImportant)) {
             UI.addItem(userItem);
-            // System.out.println(UI.getItem(0).toString());
-            // System.out.println(UI.getNumOfTasks());
         } else if (!isUrgent(deadline) && toBoolean(isImportant)) {
             XI.addItem(userItem);
         } else if (isUrgent(deadline) && !toBoolean(isImportant)) {
@@ -171,44 +176,59 @@ class Main {
         }
     }
 
-    public static void archiveAll(){
-        for (ToDoQuarter element : quartersObjects){
-            element.archieveItems();
-        }
+    public static void archiveAll() {
+        matrix.archieveItems();
     }
 
-    public static String prepareStringToExport(){
+    public static String prepareStringToExport() {
         String allEntries = "";
-        for (ToDoQuarter quarter : quartersObjects){
-            if (quarter.getTitle().equals("UI") || quarter.getTitle().equals("XI")){
-                for (ToDoItem item : quarter.getItems()){
-                allEntries += item.toFile() + "| is_important\n";
+        for (String key : matrix.getQuarters().keySet()) {
+            if (key.equals("UI") || key.equals("XI")) {
+                for (ToDoItem item : matrix.getQuarter(key).getItems()) {
+                    allEntries += item.toFile() + "|IS_IMPORTANT\n";
                 }
             } else {
-                for (ToDoItem item : quarter.getItems()) {
-                    allEntries += item.toFile() + " \n";
+                for (ToDoItem item : matrix.getQuarter(key).getItems()) {
+                    allEntries += item.toFile() + "|\n";
                 }
             }
         }
-    return allEntries;
+        return allEntries;
     }
 
-    public static void exportToTxt(){
+    public static void exportToTxt() {
         String data = prepareStringToExport();
+        String fileName = gatherInput("Type in the name of file you want your tasts to be exported to.");
         try {
-        File file = new File("ToDoItems.txt");
-        FileWriter writer = new FileWriter(file, true);
-        writer.write(data);
-        writer.close();
-        } catch (IOException e){
+            File file = new File(fileName);
+            FileWriter writer = new FileWriter(file, true);
+            writer.write(data);
+            writer.close();
+        } catch (IOException e) {
             System.out.println(e);
         }
     }
 
-    public static void displayTable(){
+    public static void displayTable() {
         System.out.println(matrix.toString());
     }
 
+    public static void importFromTxt() {
+        String fileName = gatherInput("Type in the name of the file to load ToDoItems from.");
+        try {
+            File file = new File(fileName);
+            Scanner fileScanner = new Scanner(file);
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] lineSplit = line.split("\\|");
+                String isImportantString = lineSplit.length == 3 ? "Y" : "N";
+                createItemAddToQuarter(lineSplit[1], lineSplit[0], isImportantString);
+            }
+            fileScanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
+    }
 }
 
 // public static void changeStatusOfItem(){

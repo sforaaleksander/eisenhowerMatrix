@@ -1,41 +1,40 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-class ToDoItem{
+class ToDoItem {
     private String title;
     private LocalDate deadline;
     private boolean isDone;
 
-
-    public ToDoItem(String title, LocalDate deadline){
+    public ToDoItem(String title, LocalDate deadline) {
         this.title = title;
         this.deadline = deadline;
         isDone = false;
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return this.title;
     }
 
-    public LocalDate getDeadline(){
+    public LocalDate getDeadline() {
         return this.deadline;
     }
 
-    public boolean getStatus(){
+    public boolean getStatus() {
         return this.isDone;
     }
 
-    public void mark(){
+    public void mark() {
         this.isDone = true;
         System.out.println("ToDoItem marked as done.");
     }
 
-    public void unmark(){
+    public void unmark() {
         this.isDone = false;
         System.out.println("ToDoItem marked as undone.");
     }
 
-    public String toString(){
+    public String toString() {
         String entry = "";
         String status = isDone ? "[X]" : "[ ]";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -44,12 +43,11 @@ class ToDoItem{
         return entry;
     }
 
-    public String toFile(){
+    public String toFile() {
         String entry = "";
-        String status = isDone ? "[X]" : "[ ]";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String deadlineString = formatter.format(this.deadline);
-        entry += status + "|" + deadlineString + "|" + this.title;
+        entry += deadlineString + "|" + this.title;
         return entry;
     }
 }
