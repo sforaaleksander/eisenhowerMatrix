@@ -37,7 +37,7 @@ class ToDoItem{
 
     public String toString(){
         String entry = "";
-        String status = isDone ? "X" : " ";
+        String status = isDone ? "[X]" : "[ ]";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String deadlineString = formatter.format(this.deadline);
         entry += status + deadlineString + " " + this.title;

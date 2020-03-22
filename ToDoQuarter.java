@@ -3,11 +3,12 @@ import java.util.List;
 import java.time.LocalDate;
 
 class ToDoQuarter {
-    private List<ToDoItem> toDoList = new ArrayList<>();
+    private List<ToDoItem> toDoList;
     private String title;
 
     public ToDoQuarter(String title) {
         // Constructs a TodoQuarter object with list of TodoItem objects
+        toDoList = new ArrayList<>();
         this.title = title;
 
     }
@@ -63,9 +64,15 @@ class ToDoQuarter {
         return this.toDoList;
     }
 
-    public void toStringItems() {
+    public String toString() {
         // Returns a formatted list of todoItems sorted decreasing by deadline. There is
         // an expecting output:
+        String output = "";
+        int i = 1;
+        for (ToDoItem element : this.toDoList){
+            output += i++ + ". " + element.toString() + "\n";
+        }
+        return output;
     }
 
     public int getNumOfTasks() {

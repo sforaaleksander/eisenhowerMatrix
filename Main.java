@@ -37,7 +37,8 @@ class Main {
 
     private static void mainMenu() {
         String[] menuList = { "Add a ToDoItem", "Delete a ToDoItem", "Change status of a ToDoItem",
-                "Display all ToDoItems", "Archive all done ToDoItems", "Export ToDoItems to a .cvs file", "Import ToDoItems from a .csv file", "Exit" };
+                "Display all ToDoItems", "Archive all done ToDoItems", "Export ToDoItems to a .cvs file", "Import ToDoItems from a .csv file", 
+                "Display as a table","Exit" };
         System.out.println("");
         System.out.println("EISENHOWER MATRIX");
         System.out.println("");
@@ -60,8 +61,8 @@ class Main {
         menuMap.put("3", () -> changeStatusOfItem());
         menuMap.put("4", () -> printAllItems());
         menuMap.put("6", () -> exportToTxt());
-       
-        menuMap.put("8", () -> exitApp());
+        menuMap.put("8", () -> displayTable());
+        menuMap.put("9", () -> exitApp());
     }
 
     private static LocalDate convertStringToLocalDate(String userDate) {
@@ -87,13 +88,18 @@ class Main {
     }
 
     private static void createQuartersAndMatrix() {
+        matrix = new ToDoMatrix();
         UI = new ToDoQuarter("UI");
+        matrix.addQuarter("UI", UI);
         XI = new ToDoQuarter("XI");
+        matrix.addQuarter("XI", XI);
         UX = new ToDoQuarter("UX");
+        matrix.addQuarter("UX", UX);
         XX = new ToDoQuarter("XX");
+        matrix.addQuarter("XX", XX);
         quartersLists = Arrays.asList(UI.getItems(), UX.getItems(), XI.getItems(), XX.getItems());
         quartersObjects = new ArrayList<ToDoQuarter>(Arrays.asList(UI, UX, XI, XX));
-        matrix = new ToDoMatrix();
+        
     }
 
     private static boolean isUrgent(LocalDate deadline) {
@@ -197,6 +203,10 @@ class Main {
         } catch (IOException e){
             System.out.println(e);
         }
+    }
+
+    public static void displayTable(){
+        System.out.println(matrix.toString());
     }
 
 }
