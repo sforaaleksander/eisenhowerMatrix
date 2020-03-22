@@ -7,7 +7,6 @@ class ToDoMatrix {
 
     public ToDoMatrix() {
         toDoQuartersMap = new HashMap<>();
-
     }
 
     public Map<String, ToDoQuarter> getQuarters() {

@@ -112,16 +112,13 @@ class Main {
     private static boolean isUrgent(LocalDate deadline) {
         if ((deadline.minusDays(3).compareTo(LocalDate.now()) < 0)) {
             return true;
-        } else {
-            return false;
-        }
+        }return false;        
     }
 
     private static boolean toBoolean(String yesOrNo) {
         if (yesOrNo.equals("Y")) {
             return true;
-        } else
-            return false;
+        }return false;
     }
 
     private static void addToQuarter(ToDoItem userItem, LocalDate deadline, String isImportant) {
